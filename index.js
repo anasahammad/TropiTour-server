@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const port = process.env.PORT || 5000;
 
@@ -47,6 +47,12 @@ async function run() {
         const cursor = spotCollection.find()
         const result = await cursor.toArray()
         res.send(result)
+    })
+
+    app.get('/myList/:email', async(req, res)=>{
+    console.log(req.params);
+      const result = await spotCollection.find({email: req.params.email}).toArray();
+      res.send(result)
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
