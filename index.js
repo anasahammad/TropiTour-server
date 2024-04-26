@@ -61,6 +61,29 @@ async function run() {
       const result = await spotCollection.deleteOne(query)
       res.send(result);
     })
+
+    app.patch('/myList/:email', async(req, res)=>{
+      
+      const spot = req.body;
+      console.log(spot);
+      const filter = {email: spot.email}
+      const options = {upsert : true}
+      const updateSpot = {
+        $set: {
+          spotName: spot.spotName,
+          imageURL: spot.imageURL,
+          country: spot.country,
+          location: spot.location,
+          avgCost: spot.avgCost,
+          seasonality: spot.seasonality,
+          travelTime: spot.travelTime,
+          totalVisitors: spot.totalVisitors,
+          shortDescription: spot.shortDescription
+        }
+      }
+      const result = await spotCollection.updateOne(filter, updateSpot, options)
+      res.send(result);
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
