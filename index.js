@@ -34,6 +34,7 @@ async function run() {
     await client.connect();
     const database = client.db("touristSpotDB")
     const spotCollection = database.collection('spots')
+    const countries = database.collection('countries')
 
 
     app.post('/spots', async(req, res)=>{
@@ -48,13 +49,13 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
-
+//get methode for specific user's 
     app.get('/myList/:email', async(req, res)=>{
     console.log(req.params);
       const result = await spotCollection.find({email: req.params.email}).toArray();
       res.send(result)
     })
-
+//delete method for the specific spot
     app.delete('/myList/:email', async(req, res)=>{
       const id = req.params.email;
       const query = {_id: new ObjectId(id)}
@@ -62,6 +63,7 @@ async function run() {
       res.send(result);
     })
 
+    //update method for the specific spot
     app.patch('/myList/:email', async(req, res)=>{
       
       const spot = req.body;
@@ -84,6 +86,13 @@ async function run() {
       const result = await spotCollection.updateOne(filter, updateSpot, options)
       res.send(result);
     })
+
+    // country collection from database
+    app.get('/countries',async(req, res)=>{
+      const cursor = countries.find()
+        const result = await cursor.toArray()
+        res.send(result)
+    } )
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
