@@ -5,15 +5,10 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const port = process.env.PORT || 5000;
 
-//touristSpot
-//uFaO8Czxuhk0eWhh
+
+//middleware
 app.use(cors())
 app.use(express.json())
-
-
-app.get('/', (req, res)=>{
-    res.send('country is comming soon')
-})
 
 
 
@@ -31,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    //  await client.connect();
     const database = client.db("touristSpotDB")
     const spotCollection = database.collection('spots')
     const countries = database.collection('countries')
@@ -45,6 +40,7 @@ async function run() {
     })
 
     app.get('/spots', async(req, res)=>{
+      
         const cursor = spotCollection.find()
         const result = await cursor.toArray()
         res.send(result)
@@ -94,7 +90,7 @@ async function run() {
         res.send(result)
     } )
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -103,7 +99,9 @@ async function run() {
 }
 run().catch(console.dir);
 
-
+app.get('/', (req, res)=>{
+  res.send('country is comming soon')
+})
 app.listen(port, ()=>{
     console.log(`The server is running from ${port}`);
 })
